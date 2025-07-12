@@ -1,0 +1,2 @@
+# Exclude FoundryVTT ZIP file from Git Commits
+FoundryVTT*

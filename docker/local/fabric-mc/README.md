@@ -5,7 +5,8 @@ Container for running an instance of a modded Minecraft fabric server
 > Current Dockerfile builds a container for MC 1.20.1 running Fabric 0.16.10
 
 > These can be changed by editing the values of the arguments **mcversion**
-> and **loader** in the Dockerfile
+> and **loader** in the Dockerfile and editing the image of the compose file
+> accordingly
 
 The container needs a **runtime** folder to be mounted on /opt/server-runtime.
 This is where the server files are stored, such as world information and mods.

@@ -1,6 +1,6 @@
 services:
   mc-server:
-    image: local/fabric-mc:0.16.10
+    image: local/fabric-mc:1.20.1-0.16.10
     init: true
     environment:
       MEMORY: "8192"
@@ -11,11 +11,10 @@ services:
       ENFORCE_SECURE_PROFILE: "false"
       ENFORCE_WHITELIST: "true"
       MAX_PLAYERS: "3"
-      MOTD: "Local §6Prominence §6II §6RPG§r Server"
+      MOTD: "Fabric Minecraft Server"
     ports:
       - 10.0.0.127:25565:25565/tcp
     volumes:
       - type: bind
         source: ./runtime
         target: /opt/server-runtime
-

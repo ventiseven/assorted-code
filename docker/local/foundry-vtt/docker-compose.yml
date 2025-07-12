@@ -1,6 +1,6 @@
 services:
   foundry-vtt:
-    image: local/faoundry-vtt:13.346
+    image: local/foundry-vtt:13.346
     init: true
     environment:
       SSL_ENABLED: "true"

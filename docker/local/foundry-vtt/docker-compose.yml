@@ -3,10 +3,12 @@ services:
     image: local/foundry-vtt:13.346
     init: true
     environment:
-      SSL_ENABLED: "true"
+      SSL_ENABLED: "false"
+      SSL_CERT: ""
+      SSL_KEY: ""
     ports:
-      - 127.0.0.1:443:30000/tcp
+    - 127.0.0.1:30000:30000/tcp
     volumes:
-      - type: bind
-        source: ./data
-        target: /opt/foundry-vtt-data
+    - foundry-vtt-data:/opt/foundry-vtt-data
+volumes:
+  foundry-vtt-data:

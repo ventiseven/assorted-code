@@ -5,30 +5,30 @@ if [ ${SSL_ENABLED} == "true" ]; then
   if [ -z "${SSL_CERT}" ] || [ -z "${SSL_KEY}" ]; then
     ssl_autoconfig=1
   else
-    if [ ! -f "${SSL_CERT}" ] || [ ! -f "${SSL_KEY}" ]; then
+    if [ ! -f "/opt/foundry-vtt-ssl/${SSL_CERT}" ] || [ ! -f "/opt/foundry-vtt-ssl/${SSL_KEY}" ]; then
       ssl_autoconfig=1
     fi
   fi
   if [ $ssl_autoconfig -eq 1 ]; then
-    ssl_cert='"/opt/foundry-vtt-app/cert.pem"'
-    ssl_key='"/opt/foundry-vtt-app/key.pem"'
+    ssl_cert='"/opt/foundry-vtt-ssl/cert.pem"'
+    ssl_key='"/opt/foundry-vtt-ssl/key.pem"'
     openssl req -x509 \
                 -newkey rsa:4096 \
-                -keyout /opt/foundry-vtt-app/key.pem \
-                -out /opt/foundry-vtt-app/cert.pem \
+                -keyout /opt/foundry-vtt-ssl/key.pem \
+                -out /opt/foundry-vtt-ssl/cert.pem \
                 -sha256 \
                 -nodes \
                 -subj "/CN=foundry-vtt" > /dev/null 2>&1
   else
-    ssl_cert=\""${SSL_CERT}"\"
-    ssl_key=\""${SSL_KEY}"\"
+    ssl_cert=\""/opt/foundry-vtt-ssl/${SSL_CERT}"\"
+    ssl_key=\""/opt/foundry-vtt-ssl/${SSL_KEY}"\"
   fi
 else
   ssl_cert="null"
   ssl_key="null"
 fi
 
-mkdir /opt/foundry-vtt-data/Config
+mkdir -p /opt/foundry-vtt-data/Config
 cat > /opt/foundry-vtt-data/Config/options.json <<EOF
 {
   "dataPath": "/opt/foundry-vtt-data",
@@ -57,7 +57,12 @@ cat > /opt/foundry-vtt-data/Config/options.json <<EOF
 EOF
 
 stop_foundry_int() {
+    echo "Received SIGINT, forwarding to child process..."
     kill -2 $FOUNDRY_PID
+    echo "Waiting for child process to exit"
+    wait $FOUNDRY_PID
+    echo "Child process stopped. Exiting..."
+    exit 0
 }
 
 stop_foundry_term() {

@@ -1,0 +1,4 @@
+[mcserver]
+hostname = localhost
+port = 25575
+password = mcserver

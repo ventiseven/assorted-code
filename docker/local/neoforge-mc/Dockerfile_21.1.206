@@ -8,5 +8,6 @@ RUN wget https://maven.neoforged.net/releases/net/neoforged/neoforge/${NEOFORGE_
 RUN java -jar neoforge-${NEOFORGE_VERSION}-installer.jar --install-server /opt/mc-server --server-jar \
     && chmod 755 /opt/mc-server/start.sh \
     && chmod 755 /opt/mc-server/setup-server-properties.sh
+RUN mkfifo /opt/mc-server/console-fifo
 WORKDIR /opt/server-runtime
 ENTRYPOINT [ "/opt/mc-server/start.sh" ]

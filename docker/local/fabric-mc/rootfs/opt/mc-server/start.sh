@@ -40,12 +40,13 @@ cp server.properties.default server.properties
 cp -r /opt/mc-server/. /opt/server-runtime
 
 stop_server() {
-  rcon -s mcserver stop
+  echo "stop" > /opt/mc-server/console-fifo
+  wait $SERVER_PID
 }
 
 trap stop_server SIGINT SIGTERM
 
 cd /opt/server-runtime
-java ${MEMORY_ARGS} ${AIKAR_FLAGS} -jar /opt/server-runtime/${SERVER_JAR} nogui &
+cat /opt/mc-server/console-fifo | java ${MEMORY_ARGS} ${AIKAR_FLAGS} -jar /opt/server-runtime/${SERVER_JAR} nogui &
 SERVER_PID=$!
 wait $SERVER_PID

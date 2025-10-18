@@ -20,9 +20,10 @@ The amount of memory assigned to the server instance is specified via the
 The EULA must be accepted by setting the environment variable **ACCEPT_EULA** to
 "true".
 
-Commands can be executed directly on the server via docker exec and rcon
+Commands can be executed directly on the server via docker exec by running STDIN
+to the named pipe **/opt/mc-server/console-fifo**
 ```
-docker exec <container> rcon -s mcserver <minecraft_command>
+docker exec <container> echo "<command>" > /opt/mc-server/console-fifo
 ```
 
 The following are the server properties that can be modified via environment

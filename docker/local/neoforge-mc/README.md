@@ -1,12 +1,12 @@
 # Fabric MC
 
-Container for running an instance of a modded Minecraft fabric server
+Container for running an instance of a modded Minecraft neoforge server
 
-> Current Dockerfile builds a container for MC 1.20.1 running Fabric 0.16.10
+> Current Dockerfile builds a container for MC 1.21.1 running NeoForge 21.1.206
 
-> These can be changed by editing the values of the arguments **mcversion**
-> and **loader** in the Dockerfile and editing the image of the compose file
-> accordingly
+> This can be changed by editing the values of the argument **NEOFORGE_VERSION**
+> in the Dockerfile and editing the image of the compose file to the desired MC
+> version.
 
 The container needs a **runtime** folder to be mounted on /opt/server-runtime.
 This is where the server files are stored, such as world information and mods.
@@ -20,9 +20,10 @@ The amount of memory assigned to the server instance is specified via the
 The EULA must be accepted by setting the environment variable **ACCEPT_EULA** to
 "true".
 
-Commands can be executed directly on the server via docker exec and rcon
+Commands can be executed directly on the server via docker exec by running STDIN
+to the named pipe **/opt/mc-server/console-fifo**
 ```
-docker exec <container> rcon -s mcserver <minecraft_command>
+docker exec <container> echo "<command>" > /opt/mc-server/console-fifo
 ```
 
 The following are the server properties that can be modified via environment

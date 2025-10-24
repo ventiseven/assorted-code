@@ -47,6 +47,6 @@ stop_server() {
 trap stop_server SIGINT SIGTERM
 
 cd /opt/server-runtime
-cat /opt/mc-server/console-fifo | java ${MEMORY_ARGS} ${AIKAR_FLAGS} -jar /opt/server-runtime/${SERVER_JAR} nogui &
+tail -f /opt/mc-server/console-fifo | java ${MEMORY_ARGS} ${AIKAR_FLAGS} -jar /opt/server-runtime/${SERVER_JAR} nogui &
 SERVER_PID=$!
 wait $SERVER_PID

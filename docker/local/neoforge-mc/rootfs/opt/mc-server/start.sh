@@ -40,8 +40,15 @@ cp server.properties.default server.properties
 cp -r /opt/mc-server/. /opt/server-runtime
 
 stop_server() {
+  echo "$0: SIGINT - Stopping Server..."
   echo "stop" > /opt/mc-server/console-fifo
-  wait $SERVER_PID
+}
+
+wait_for_pid() {
+  while kill -0 $1 2>/dev/null
+  do
+    sleep 0.5
+  done
 }
 
 trap stop_server SIGINT SIGTERM
@@ -49,4 +56,13 @@ trap stop_server SIGINT SIGTERM
 cd /opt/server-runtime
 tail -f /opt/mc-server/console-fifo | java ${MEMORY_ARGS} ${AIKAR_FLAGS} -jar /opt/server-runtime/${SERVER_JAR} nogui &
 SERVER_PID=$!
-wait $SERVER_PID
+TAIL_PID=$(jobs -p)
+echo "$0: Console FIFO Process: PID(${TAIL_PID})"
+echo "$0: Server Process: PID(${SERVER_PID})"
+echo "$0: Waiting for server process to complete..."
+wait_for_pid $SERVER_PID
+echo "$0: Server process completed, killing console FIFO process..."
+kill $TAIL_PID
+echo "$0: Waiting for console FIFO process to complete..."
+wait_for_pid $TAIL_PID
+echo "$0: Done. Shutting down..."
